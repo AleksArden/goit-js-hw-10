@@ -2,6 +2,13 @@ import './css/styles.css';
 import debounce from 'lodash.debounce';
 import { fetchCountries } from './fetch-countries';
 import Notiflix from 'notiflix';
+Notiflix.Notify.init({
+    width: "600px",
+    fontSize: "28px",
+    cssAnimationStyle: "zoom",
+    cssAnimationDuration: 600,
+    showOnlyTheLastOne: true
+});
 
 class Searcher {
     constructor({ refs = { inputRef, listRef, infoCountryRef }, fetchCountries, debounce }) {
@@ -25,7 +32,6 @@ class Searcher {
     }
     onSearchCountries(e) {
         const inputCountry = e.target.value;
-        console.log(inputCountry);
         if (inputCountry === '') {
             this.clearMarkup();
             return;
@@ -37,7 +43,6 @@ class Searcher {
     onResolve(data) {
         const elements = this.getCountries(data);
 
-
         if (data.length > 1 && data.length < 11) {
             return (this.listRef.innerHTML = elements);
         }
@@ -47,9 +52,7 @@ class Searcher {
     }
     onReject() {
         this.clearMarkup();
-        Notiflix.Notify.failure('Oops, there is no country with that name', {
-            width: "600px", fontSize: "24px", cssAnimationStyle: "zoom", cssAnimationDuration: 600,
-        });
+        Notiflix.Notify.failure('Oops, there is no country with that name');
     }
     getCountries(data) {
         if (data.length > 10) {
@@ -58,8 +61,7 @@ class Searcher {
                 return;
             }
             Notiflix.Notify.info(
-                'Too many matches found. Please enter a more specific name.', { width: "600px", fontSize: "24px", cssAnimationStyle: "zoom", cssAnimationDuration: 600 }
-            );
+                'Too many matches found. Please enter a more specific name.');
             return;
         }
         if (data.length > 1 && data.length < 11) {
